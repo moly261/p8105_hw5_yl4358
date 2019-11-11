@@ -54,6 +54,7 @@ for (i in 1:5) {
 
 final_iris = bind_cols(output_iris)
 final_iris %>% 
+ rename(Spepal.Length = V1, Spepal.Width = V2, Petal.Length = V3, Petal.Width = V4, Species = V5) %>% 
  head(10) %>% 
   knitr::kable(digits = 2) 
 
@@ -89,8 +90,16 @@ long_df = tibble(
     names_to = "week",
     names_prefix = "week_",
     values_to = "observation"
+  ) %>% 
+  mutate(
+    arm = factor(arm),
+    subject_id = factor(subject_id),
+    week = factor(week, levels = c(1,2,3,4,5,6,7,8), ordered = TRUE)
   )
   
+long_df %>% 
+ head(10) %>% 
+  knitr::kable() 
 
 long_df %>% 
   group_by(arm,subject_id) %>% 
@@ -183,7 +192,12 @@ avg_beta1_sim =
     title = "Total samples",
     x = "True value of beta1",
     y = "Average estimate of beta1_hat"
-     )
+     ) +
+ scale_x_continuous(
+    breaks = c(1, 2, 3, 4, 5, 6)) +
+ scale_y_continuous(
+    breaks = c(1, 2, 3, 4, 5, 6),
+    limits = c(0.5,6.5))
 
 avgrej_beta1_sim =
   sim_results %>% 
@@ -196,11 +210,17 @@ avgrej_beta1_sim =
   geom_point() +
   geom_line() +
     labs(
-    title = "Samples for which the null was rejected",
+    title = "Samples for which the null \n was rejected",
     x = "True value of beta1",
     y = "Average estimate of beta1_hat"
-     )
+     ) +
+ scale_x_continuous(
+    breaks = c(1, 2, 3, 4, 5, 6)) +
+ scale_y_continuous(
+    breaks = c(1, 2, 3, 4, 5, 6),
+    limits = c(0.5,6.5))
 
 avg_beta1_sim + avgrej_beta1_sim
 ```
 
+* The sample average of beta1_hat across tests for which the null is rejected is relatively higher that the true value of beta1. Because the null hypothesis is rejected, which means beta1 doesn't equal to the true value.
