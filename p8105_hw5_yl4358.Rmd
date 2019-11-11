@@ -104,6 +104,9 @@ long_df %>%
   facet_grid(.~arm)
 ```
 
-* The obeservation in experimental group is relative higher than that in control group.
+* The obeservation in experimental group is increasing overtime while the observation in control group is stable. The obeservation in experimental group is relative higher than that in control group.
 
+```{r}
+
+```
 
