@@ -66,3 +66,44 @@ output_iris_map %>%
 
 ```
 
+
+# Problem 2
+
+```{r}
+long_df = tibble(
+  file_names = list.files(path = "./data"),
+  file_path = str_c("./data/", file_names)
+  ) %>% 
+  mutate(
+    observation_df = map(file_path, read_csv)
+  ) %>% 
+  unnest() %>% 
+  select(-file_path) %>% 
+  separate(col = file_names, into = c("arm", "subject_id"), sep = "_") %>%
+  mutate(
+    arm = recode(arm, "con" = "control" , "exp" = "experimental"),
+    subject_id = str_replace(subject_id, ".csv", " ")
+  ) %>% 
+  pivot_longer(
+    week_1:week_8,
+    names_to = "week",
+    names_prefix = "week_",
+    values_to = "observation"
+  )
+  
+
+long_df %>% 
+  group_by(arm,subject_id) %>% 
+  ggplot(aes(x = week, y = observation, group = subject_id, color = subject_id)) +
+  geom_line() +
+  labs(
+    title = "Observation on each subject overtime",
+    x = "Week",
+    y = "Observation"
+     ) +
+  facet_grid(.~arm)
+```
+
+* The obeservation in experimental group is relative higher than that in control group.
+
+
