@@ -52,13 +52,6 @@ for (i in 1:5) {
   output_iris[[i]] = replace_iris_na(x_arg = iris_with_missing[[i]])
 }
 
-final_iris = bind_cols(output_iris)
-final_iris %>% 
- rename(Spepal.Length = V1, Spepal.Width = V2, Petal.Length = V3, Petal.Width = V4, Species = V5) %>% 
- head(10) %>% 
-  knitr::kable(digits = 2) 
-
-
 output_iris_map = map_df(iris_with_missing, replace_iris_na)
 
 output_iris_map %>% 
