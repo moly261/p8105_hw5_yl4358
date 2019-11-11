@@ -37,6 +37,32 @@ iris_with_missing = iris %>%
   map_df(~replace(.x, sample(1:150, 20), NA)) %>%
   mutate(Species = as.character(Species))
 
+replace_iris_na = function(x_arg){
+  if (is.numeric(x_arg)) {
+   x_arg = replace(x_arg, is.na(x_arg), mean(x_arg,na.rm = TRUE))
+  } else {
+   x_arg = replace(x_arg, is.na(x_arg), "virginica") 
+  }
+}
+
+output_iris = vector("list", length = 5)
+
+for (i in 1:5) {
+  
+  output_iris[[i]] = replace_iris_na(x_arg = iris_with_missing[[i]])
+}
+
+final_iris = bind_cols(output_iris)
+final_iris %>% 
+ head(10) %>% 
+  knitr::kable(digits = 2) 
+
+
+output_iris_map = map_df(iris_with_missing, replace_iris_na)
+
+output_iris_map %>% 
+ head(10) %>% 
+  knitr::kable(digits = 2) 
 
 ```
 
